@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For My Only One 🌸</title>
+  <style>
+    :root{
+      --bg1:#fff0f6; /* light pink */
+      --bg2:#ffe6f0; /* softer pink */
+      --card:#ffffffcc;
+      --accent:#ff80aa; /* stronger pink */
+      --soft:#663344;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,200,230,0.35), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(255,150,200,0.25), transparent),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--soft);
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;
+      overflow:hidden;
+    }
+
+    /* Card */
+    .card{
+      width:100%;max-width:720px;background:var(--card);
+      border-radius:20px;padding:36px 32px;box-shadow:0 10px 40px rgba(200,100,150,0.3);
+      position:relative;backdrop-filter: blur(6px);
+      border:1px solid rgba(255,192,203,0.4);
+    }
+
+    h1{font-size:28px;letter-spacing:0.2px;margin-bottom:8px}
+    p.lead{font-size:18px;line-height:1.5;margin-bottom:18px}
+
+    /* typing effect */
+    .typing{font-weight:600;font-size:20px;white-space:nowrap;overflow:hidden;border-right:2px solid rgba(0,0,0,0.15);width:0}
+
+    /* flowers animation */
+    .flowers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .flower{
+      position:absolute;bottom:-60px;width:32px;height:32px;transform-origin:center center;
+      animation:float linear infinite;opacity:0.9;
+    }
+    @keyframes float{
+      0%{transform:translateY(0) scale(0.8);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(-120vh) scale(1.2);opacity:0}
+    }
+
+    /* button */
+    .btn{
+      display:inline-block;margin-top:14px;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,var(--accent),#ffb3c7);
+      color:white;text-decoration:none;font-weight:700;box-shadow:0 8px 24px rgba(255,92,138,0.18);border:none;cursor:pointer
+    }
+
+    footer{margin-top:18px;font-size:13px;opacity:.8}
+
+    /* responsive */
+    @media (max-width:540px){.card{padding:20px;border-radius:14px}h1{font-size:22px}.typing{font-size:18px}}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Good morning, my love <span aria-hidden>🌸</span></h1>
+
+    <p class="lead">You make my world bloom with joy <span aria-hidden>🌷</span></p>
+
+    <div style="margin-bottom:8px">
+      <span id="typed" class="typing" aria-live="polite"></span>
+    </div>
+
+    <p style="margin-top:8px;opacity:.95">Forever yours, with love and flowers. 💖</p>
+
+    <a class="btn" id="reveal">Open a surprise</a>
+
+    <footer>Made with love 🌸</footer>
+
+    <div class="flowers" id="flowers"></div>
+  </div>
+
+  <script>
+    // Typing message lines
+    const lines = [
+      'You are the sunshine to my flowers.',
+      'My love for you grows each day. 🌹',
+      'You make life beautiful like spring. 🌸'
+    ];
+
+    const typedEl = document.getElementById('typed');
+    let lineIndex=0;
+
+    function typeLine(){
+      const text = lines[lineIndex];
+      typedEl.style.width = '0ch';
+      typedEl.textContent = '';
+      typedEl.style.borderRight = '2px solid rgba(0,0,0,0.15)';
+      let i=0;
+      const t = setInterval(()=>{
+        typedEl.textContent += text[i++] || '';
+        typedEl.style.width = i + 'ch';
+        if(i>text.length){
+          clearInterval(t);
+          setTimeout(()=>{
+            // erase
+            const e = setInterval(()=>{
+              typedEl.textContent = typedEl.textContent.slice(0,-1);
+              if(typedEl.textContent.length===0){
+                clearInterval(e);
+                lineIndex = (lineIndex+1) % lines.length;
+                setTimeout(typeLine,400);
+              }
+            },50);
+          },1400);
+        }
+      },70);
+    }
+    setTimeout(typeLine,800);
+
+    // Create floating flowers (emoji 🌸, 🌷, 💐)
+    const flowers = document.getElementById('flowers');
+    const symbols = ['🌸','🌷','💐'];
+    function spawnFlower(){
+      const el = document.createElement('div');
+      el.className = 'flower';
+      el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+      const size = Math.random()*20 + 20;
+      el.style.fontSize = size+'px';
+      const left = Math.random()*100;
+      el.style.left = left+'%';
+      el.style.animationDuration = (6 + Math.random()*6) + 's';
+      flowers.appendChild(el);
+      setTimeout(()=>{el.remove()},16000);
+    }
+    for(let i=0;i<8;i++) setTimeout(spawnFlower,i*300);
+    setInterval(spawnFlower,1200);
+
+    // Reveal surprise
+    document.getElementById('reveal').addEventListener('click',()=>{
+      const overlay = document.createElement('div');
+      overlay.style.position='fixed';overlay.style.inset=0;overlay.style.display='flex';
+      overlay.style.alignItems='center';overlay.style.justifyContent='center';
+      overlay.style.background='rgba(255,240,246,0.95)';
+      overlay.style.zIndex=9999;
+      overlay.innerHTML = `
+        <div style="max-width:520px;padding:28px;background:white;border-radius:14px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.2)">
+          <h2 style="margin-bottom:6px;color:#ff5c8a">To my only flower 🌸</h2>
+          <p style="margin-bottom:14px;color:#663344">You are the garden of my heart. Always blooming, always mine.</p>
+          <div style="font-size:28px">🌹 🌸 💐</div>
+          <button id="close" style="margin-top:14px;padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;background:#ff80aa;color:white">Close</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      document.getElementById('close').addEventListener('click',()=>overlay.remove());
+    });
+  </script>
+</body>
+</html>
